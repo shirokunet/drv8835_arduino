@@ -10,6 +10,9 @@ Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse) {
   pinMode(pin_pwm_a_, OUTPUT);
   pinMode(pin_pwm_b_, OUTPUT);
 
+  digitalWrite(pin_pwm_a_, LOW);
+  digitalWrite(pin_pwm_b_, LOW);
+
   ledcSetup(ledc_channel_a_, 490, 10);
   ledcSetup(ledc_channel_b_, 490, 10);
 
