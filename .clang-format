@@ -1,0 +1,9 @@
+---
+Language: Cpp
+Standard: c++17
+BasedOnStyle: Google
+ReflowComments: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+SpacesInLineCommentPrefix:
+  Minimum: 0
+  Maximum: -1
