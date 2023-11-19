@@ -18,6 +18,9 @@ Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse) {
 
   ledcAttachPin(pin_pwm_a_, ledc_channel_a_);
   ledcAttachPin(pin_pwm_b_, ledc_channel_b_);
+
+  ledcWrite(ledc_channel_a_, 0);
+  ledcWrite(ledc_channel_b_, 0);
 }
 
 void Drv8835::drive(double desired_speed) {
