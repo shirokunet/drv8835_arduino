@@ -1,8 +1,11 @@
 #include "drv8835.hpp"
 
-Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse) {
+Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse,
+                 double deadband_canceler_a, double deadband_canceler_b) {
   ledc_channel_a_ = ledc_channel * 2 + 0;
   ledc_channel_b_ = ledc_channel * 2 + 1;
+  deadband_canceler_a_ = deadband_canceler_a;
+  deadband_canceler_b_ = deadband_canceler_b;
   pin_pwm_a_ = pin_pwm_a;
   pin_pwm_b_ = pin_pwm_b;
   reverse_ = reverse;
@@ -13,8 +16,8 @@ Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse) {
   digitalWrite(pin_pwm_a_, LOW);
   digitalWrite(pin_pwm_b_, LOW);
 
-  ledcSetup(ledc_channel_a_, 490, 10);
-  ledcSetup(ledc_channel_b_, 490, 10);
+  ledcSetup(ledc_channel_a_, 25000, 10);
+  ledcSetup(ledc_channel_b_, 25000, 10);
 
   ledcAttachPin(pin_pwm_a_, ledc_channel_a_);
   ledcAttachPin(pin_pwm_b_, ledc_channel_b_);
@@ -26,6 +29,13 @@ Drv8835::Drv8835(int ledc_channel, int pin_pwm_a, int pin_pwm_b, bool reverse) {
 void Drv8835::drive(double desired_speed) {
   if (reverse_) {
     desired_speed *= -1.0;
+  }
+
+  if (desired_speed > 0) {
+    desired_speed += deadband_canceler_a_;
+  } else if (desired_speed < 0) {
+    desired_speed -= deadband_canceler_b_;
+  } else {
   }
 
   int speed = int(desired_speed * 1023);
